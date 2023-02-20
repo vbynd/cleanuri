@@ -1,9 +1,10 @@
 package api;
 
-import api.PojoClasses.CorrectRequest;
-import api.PojoClasses.IncorrectRequest;
-import api.PojoClasses.SuccessClean;
-import api.PojoClasses.UnsuccessClean;
+import api.pojoClasses.CorrectRequest;
+import api.pojoClasses.IncorrectRequest;
+import api.pojoClasses.SuccessClean;
+import api.pojoClasses.UnsuccessClean;
+import io.restassured.module.jsv.JsonSchemaValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,12 +18,14 @@ import static io.restassured.RestAssured.given;
 public class ClearuriTest {
     private static final String URL = "https://cleanuri.com/";
     private static final String recoursePartOfURI = "api/v1/shorten";
-    private static final String pathToInputFile = "C:\\Additional\\IntelliJ IDEA Community Edition 2020.1.1\\Projects\\cleanuri\\src\\test\\java\\api\\urlToClean.txt";
+    private static final String inputFileWithUrl = "./src/test/resources/urlToClean.txt";
+    private static final String successResponseSchema = "./src/test/resources/successResponseSchema.json";
+    private static final String errorResponseSchema = "./src/test/resources/errorResponseSchema.json";
     private String urlToClean;
 
     @BeforeEach
     public void setUp() {
-        File file = new File(pathToInputFile);
+        File file = new File(inputFileWithUrl);
         try {
             Scanner sc = new Scanner(file);
             urlToClean = sc.next();
@@ -35,7 +38,7 @@ public class ClearuriTest {
 
     @Test
     public void successfullyCleanedUrl() {
-        Specifications.installSpecification(Specifications.requestSpecification(URL), Specifications.responseSpecificationOK200());
+        Specifications.installSpecification(Specifications.requestSpecification(URL));
 
         CorrectRequest request = new CorrectRequest(urlToClean);
 
@@ -44,40 +47,71 @@ public class ClearuriTest {
                 .when()
                 .post(recoursePartOfURI)
                 .then()
+                .statusCode(200)
+                .assertThat().body(JsonSchemaValidator.matchesJsonSchema(new File(successResponseSchema)))
                 .extract().as(SuccessClean.class);
 
         Assertions.assertTrue(successClean.getResult_url().startsWith("https://cleanuri.com/"));
     }
 
     @Test
-    public void errorAfterIncorrectMethodSend() {
-        Specifications.installSpecification(Specifications.requestSpecification(URL), Specifications.responseSpecificationMETHODNOTALLOWED405());
+    public void error405AfterGetMethodSend() {
+        Specifications.installSpecification(Specifications.requestSpecification(URL));
 
         CorrectRequest request = new CorrectRequest(urlToClean);
 
         given()
                 .when()
-                .get(recoursePartOfURI);
+                .get(recoursePartOfURI)
+                .then()
+                .statusCode(405);
+    }
+
+    @Test
+    public void error405AfterPutMethodSend() {
+        Specifications.installSpecification(Specifications.requestSpecification(URL));
+
+        CorrectRequest request = new CorrectRequest(urlToClean);
 
         given()
                 .body(request)
                 .when()
-                .put(recoursePartOfURI);
+                .put(recoursePartOfURI)
+                .then()
+                .statusCode(405);
+    }
+
+    @Test
+    public void error405AfterPatchMethodSend() {
+        Specifications.installSpecification(Specifications.requestSpecification(URL));
+
+        CorrectRequest request = new CorrectRequest(urlToClean);
 
         given()
                 .body(request)
                 .when()
-                .patch(recoursePartOfURI);
+                .patch(recoursePartOfURI)
+                .then()
+                .statusCode(405);
+    }
+
+    @Test
+    public void error405AfterDeleteMethodSend() {
+        Specifications.installSpecification(Specifications.requestSpecification(URL));
+
+        CorrectRequest request = new CorrectRequest(urlToClean);
 
         given()
                 .body(request)
                 .when()
-                .delete(recoursePartOfURI);
+                .delete(recoursePartOfURI)
+                .then()
+                .statusCode(405);
     }
 
     @Test
     public void errorAfterEmptyURLSend() {
-        Specifications.installSpecification(Specifications.requestSpecification(URL), Specifications.responseSpecificationBADREQUEST400());
+        Specifications.installSpecification(Specifications.requestSpecification(URL));
 
         CorrectRequest request = new CorrectRequest("");
 
@@ -86,6 +120,8 @@ public class ClearuriTest {
                 .when()
                 .post(recoursePartOfURI)
                 .then()
+                .statusCode(400)
+                .assertThat().body(JsonSchemaValidator.matchesJsonSchema(new File(errorResponseSchema)))
                 .extract().as(UnsuccessClean.class);
 
         Assertions.assertEquals("API Error: After sanitization URL is empty", unsuccessClean.getError());
@@ -93,7 +129,7 @@ public class ClearuriTest {
 
     @Test
     public void errorAfterIncorrectURLSend() {
-        Specifications.installSpecification(Specifications.requestSpecification(URL), Specifications.responseSpecificationBADREQUEST400());
+        Specifications.installSpecification(Specifications.requestSpecification(URL));
 
         CorrectRequest request = new CorrectRequest(urlToClean.replace("://", ""));
 
@@ -102,6 +138,8 @@ public class ClearuriTest {
                 .when()
                 .post(recoursePartOfURI)
                 .then()
+                .statusCode(400)
+                .assertThat().body(JsonSchemaValidator.matchesJsonSchema(new File(errorResponseSchema)))
                 .extract().as(UnsuccessClean.class);
 
         Assertions.assertTrue(unsuccessClean.getError().startsWith("API Error: URL is invalid"));
@@ -109,7 +147,7 @@ public class ClearuriTest {
 
     @Test
     public void errorAfterIncorrectKeySend() {
-        Specifications.installSpecification(Specifications.requestSpecification(URL), Specifications.responseSpecificationBADREQUEST400());
+        Specifications.installSpecification(Specifications.requestSpecification(URL));
 
         IncorrectRequest request = new IncorrectRequest(urlToClean);
 
@@ -118,6 +156,8 @@ public class ClearuriTest {
                 .when()
                 .post(recoursePartOfURI)
                 .then()
+                .statusCode(400)
+                .assertThat().body(JsonSchemaValidator.matchesJsonSchema(new File(errorResponseSchema)))
                 .extract().as(UnsuccessClean.class);
 
         Assertions.assertEquals("API Error: URL is empty", unsuccessClean.getError());

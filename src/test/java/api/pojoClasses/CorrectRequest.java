@@ -1,4 +1,4 @@
-package api.PojoClasses;
+package api.pojoClasses;
 
 public class CorrectRequest {
     private String url;

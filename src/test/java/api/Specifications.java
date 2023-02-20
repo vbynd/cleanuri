@@ -15,25 +15,7 @@ public class Specifications {
                 .build();
     }
 
-    public static ResponseSpecification responseSpecificationOK200() {
-        return new ResponseSpecBuilder()
-                .expectStatusCode(200)
-                .build();
-    }
-
-    public static ResponseSpecification responseSpecificationBADREQUEST400() {
-        return new ResponseSpecBuilder()
-                .expectStatusCode(400)
-                .build();
-    }
-
-    public static ResponseSpecification responseSpecificationMETHODNOTALLOWED405() {
-        return new ResponseSpecBuilder()
-                .expectStatusCode(405)
-                .build();
-    }
-    public static void installSpecification(RequestSpecification requestSpecification, ResponseSpecification responseSpecification) {
+    public static void installSpecification(RequestSpecification requestSpecification) {
         RestAssured.requestSpecification = requestSpecification;
-        RestAssured.responseSpecification = responseSpecification;
     }
 }
