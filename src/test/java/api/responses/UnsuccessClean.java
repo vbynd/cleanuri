@@ -1,4 +1,4 @@
-package api.pojoClasses;
+package api.responses;
 
 public class UnsuccessClean {
     private String error;

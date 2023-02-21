@@ -1,9 +1,10 @@
-package api;
+package api.tests;
 
-import api.pojoClasses.CorrectRequest;
-import api.pojoClasses.IncorrectRequest;
-import api.pojoClasses.SuccessClean;
-import api.pojoClasses.UnsuccessClean;
+import api.requests.CorrectRequest;
+import api.requests.IncorrectRequest;
+import api.responses.SuccessClean;
+import api.responses.UnsuccessClean;
+import api.specifications.ReqSpecification;
 import io.restassured.module.jsv.JsonSchemaValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,30 +16,11 @@ import java.util.Scanner;
 
 import static io.restassured.RestAssured.given;
 
-public class ClearuriTest {
-    private static final String URL = "https://cleanuri.com/";
-    private static final String recoursePartOfURI = "api/v1/shorten";
-    private static final String inputFileWithUrl = "./src/test/resources/urlToClean.txt";
-    private static final String successResponseSchema = "./src/test/resources/successResponseSchema.json";
-    private static final String errorResponseSchema = "./src/test/resources/errorResponseSchema.json";
-    private String urlToClean;
-
-    @BeforeEach
-    public void setUp() {
-        File file = new File(inputFileWithUrl);
-        try {
-            Scanner sc = new Scanner(file);
-            urlToClean = sc.next();
-            sc.close();
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+public class ClearuriTest extends BaseTest{
 
     @Test
     public void successfullyCleanedUrl() {
-        Specifications.installSpecification(Specifications.requestSpecification(URL));
+        ReqSpecification.installSpecification(ReqSpecification.requestSpecification(URL));
 
         CorrectRequest request = new CorrectRequest(urlToClean);
 
@@ -56,7 +38,7 @@ public class ClearuriTest {
 
     @Test
     public void error405AfterGetMethodSend() {
-        Specifications.installSpecification(Specifications.requestSpecification(URL));
+        ReqSpecification.installSpecification(ReqSpecification.requestSpecification(URL));
 
         CorrectRequest request = new CorrectRequest(urlToClean);
 
@@ -69,7 +51,7 @@ public class ClearuriTest {
 
     @Test
     public void error405AfterPutMethodSend() {
-        Specifications.installSpecification(Specifications.requestSpecification(URL));
+        ReqSpecification.installSpecification(ReqSpecification.requestSpecification(URL));
 
         CorrectRequest request = new CorrectRequest(urlToClean);
 
@@ -83,7 +65,7 @@ public class ClearuriTest {
 
     @Test
     public void error405AfterPatchMethodSend() {
-        Specifications.installSpecification(Specifications.requestSpecification(URL));
+        ReqSpecification.installSpecification(ReqSpecification.requestSpecification(URL));
 
         CorrectRequest request = new CorrectRequest(urlToClean);
 
@@ -97,7 +79,7 @@ public class ClearuriTest {
 
     @Test
     public void error405AfterDeleteMethodSend() {
-        Specifications.installSpecification(Specifications.requestSpecification(URL));
+        ReqSpecification.installSpecification(ReqSpecification.requestSpecification(URL));
 
         CorrectRequest request = new CorrectRequest(urlToClean);
 
@@ -111,7 +93,7 @@ public class ClearuriTest {
 
     @Test
     public void errorAfterEmptyURLSend() {
-        Specifications.installSpecification(Specifications.requestSpecification(URL));
+        ReqSpecification.installSpecification(ReqSpecification.requestSpecification(URL));
 
         CorrectRequest request = new CorrectRequest("");
 
@@ -129,7 +111,7 @@ public class ClearuriTest {
 
     @Test
     public void errorAfterIncorrectURLSend() {
-        Specifications.installSpecification(Specifications.requestSpecification(URL));
+        ReqSpecification.installSpecification(ReqSpecification.requestSpecification(URL));
 
         CorrectRequest request = new CorrectRequest(urlToClean.replace("://", ""));
 
@@ -147,7 +129,7 @@ public class ClearuriTest {
 
     @Test
     public void errorAfterIncorrectKeySend() {
-        Specifications.installSpecification(Specifications.requestSpecification(URL));
+        ReqSpecification.installSpecification(ReqSpecification.requestSpecification(URL));
 
         IncorrectRequest request = new IncorrectRequest(urlToClean);
 

@@ -1,4 +1,4 @@
-package api.pojoClasses;
+package api.requests;
 
 public class IncorrectRequest {
     private String someParameter;
