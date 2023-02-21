@@ -7,12 +7,9 @@ import api.responses.UnsuccessClean;
 import api.specifications.ReqSpecification;
 import io.restassured.module.jsv.JsonSchemaValidator;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
 
 import static io.restassured.RestAssured.given;
 
