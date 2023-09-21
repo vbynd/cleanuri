@@ -1,12 +1,14 @@
-package api.tests;
+package api.clearuri;
 
+import io.qameta.allure.Epic;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class BaseTest {
+@Epic("clearUri")
+public class BaseClearUriTest {
     protected static final String URL = "https://cleanuri.com/";
     protected static final String recoursePartOfURI = "api/v1/shorten";
     protected static final String inputFileWithUrl = "./src/test/resources/urlToClean.txt";

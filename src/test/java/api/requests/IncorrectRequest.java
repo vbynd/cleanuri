@@ -1,16 +1,17 @@
 package api.requests;
 
-public class IncorrectRequest {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import org.junit.runner.Request;
+import org.junit.runner.Runner;
+
+@Data
+@AllArgsConstructor
+public class IncorrectRequest extends Request {
     private String someParameter;
 
-    public IncorrectRequest() {
-    }
-
-    public IncorrectRequest(String someParameter) {
-        this.someParameter = someParameter;
-    }
-
-    public String getSomeParameter() {
-        return someParameter;
+    @Override
+    public Runner getRunner() {
+        return null;
     }
 }

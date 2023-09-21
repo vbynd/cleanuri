@@ -1,16 +1,18 @@
 package api.requests;
 
-public class CorrectRequest {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import org.junit.runner.Request;
+import org.junit.runner.Runner;
+
+@Data
+@AllArgsConstructor
+public class CorrectRequest extends Request {
+
     private String url;
 
-    public CorrectRequest() {
-    }
-
-    public CorrectRequest(String url) {
-        this.url = url;
-    }
-
-    public String getUrl() {
-        return url;
+    @Override
+    public Runner getRunner() {
+        return null;
     }
 }
