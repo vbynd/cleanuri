@@ -9,7 +9,6 @@ import io.restassured.http.Method;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpStatus;
 import org.junit.runner.Request;
 
 import static io.restassured.RestAssured.given;
@@ -32,6 +31,7 @@ public class ClearUriController {
                 .body(body)
                 .when().request(httpMethod)
                 .then()
+                .log().all()
                 .extract().response();
         log.info("{}", response.body().toString()
                 .replaceAll(RegexpsEnum.REGEXP_FOR_CUT_STRING_BY_N_LEADING_CHARACTERS.getRegexp(COUNT_OF_SYMBOLS_IN_LOG),
