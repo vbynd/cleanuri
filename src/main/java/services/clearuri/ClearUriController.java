@@ -3,13 +3,15 @@ package services.clearuri;
 import enums.PropertyEnum;
 import enums.RegexpsEnum;
 import helpers.PropertyLoader;
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.runner.Request;
+import testmodels.requests.Request;
 
 import static io.restassured.RestAssured.given;
 
@@ -29,11 +31,11 @@ public class ClearUriController {
         Response response = given()
                 .spec(REQUEST_SPECIFICATION)
                 .body(body)
+                .filter(new AllureRestAssured())
                 .when().request(httpMethod)
                 .then()
-                .log().all()
                 .extract().response();
-        log.info("{}", response.body().toString()
+        log.info("{}", response.asPrettyString()
                 .replaceAll(RegexpsEnum.REGEXP_FOR_CUT_STRING_BY_N_LEADING_CHARACTERS.getRegexp(COUNT_OF_SYMBOLS_IN_LOG),
                         ""));
         return response;

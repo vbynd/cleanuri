@@ -91,7 +91,7 @@ public class ClearUriTests extends BaseClearUriTest {
         CorrectRequest request = getCorrectRequest(urlToClean);
         Response response = step("Делаем запрос на укорачивание ссылки",
                 () -> ClearUriController.getSentRequest(method, request));
-        step("Проверяем, что в получен status code" + HttpStatus.SC_METHOD_NOT_ALLOWED,
+        step("Проверяем, что получен status code " + HttpStatus.SC_METHOD_NOT_ALLOWED,
                 () -> assertEquals(HttpStatus.SC_METHOD_NOT_ALLOWED,
                         response.statusCode(),
                         "Status code должен быть = " + HttpStatus.SC_METHOD_NOT_ALLOWED)
@@ -110,7 +110,7 @@ public class ClearUriTests extends BaseClearUriTest {
                 () -> {
                     assertEquals(HttpStatus.SC_BAD_REQUEST,
                             response.statusCode(),
-                            "Status code должен быть = " + HttpStatus.SC_OK);
+                            "Status code должен быть = " + HttpStatus.SC_BAD_REQUEST);
                     assertTrue(response
                                     .as(UnsuccessCleanResponse.class)
                                     .getError()
@@ -131,7 +131,7 @@ public class ClearUriTests extends BaseClearUriTest {
                 () -> {
                     assertEquals(HttpStatus.SC_BAD_REQUEST,
                             response.statusCode(),
-                            "Status code должен быть = " + HttpStatus.SC_OK);
+                            "Status code должен быть = " + HttpStatus.SC_BAD_REQUEST);
                     assertTrue(response
                                     .as(UnsuccessCleanResponse.class)
                                     .getError()

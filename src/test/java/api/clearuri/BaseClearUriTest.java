@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-@Epic("clearUri")
+@Epic("ClearUri")
 public class BaseClearUriTest {
     protected static final String INPUT_FILE_WITH_URL = "./src/test/resources/urlToClean.txt";
     protected static String urlToClean;
